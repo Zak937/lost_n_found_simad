@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Items collection rules
+    match /items/{itemId} {
+      // Allow read access to any authenticated user
+      allow read: if request.auth != null;
+      
+      // Allow creation if the user is authenticated and the 'postedBy' field equals their UID
+      allow create: if request.auth != null && request.resource.data.postedBy == request.auth.uid;
+      
+      // Allow update or delete ONLY if the user is authenticated and they are the one who created it
+      allow delete: if request.auth != null && resource.data.postedBy == request.auth.uid;
+      
+      // Allow update if owner, OR if a Viewer is just updating the status to Claimed_Pending
+      allow update: if request.auth != null && (
+        resource.data.postedBy == request.auth.uid || 
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['itemStatus']) && request.resource.data.itemStatus == 'Claimed_Pending')
+      );
+    }
+    
+    // Add additional collections here later if we implement user profiles or admins
+  }
+}

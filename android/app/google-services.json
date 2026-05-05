@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "558966368070",
+    "project_id": "lost-found-simad",
+    "storage_bucket": "lost-found-simad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558966368070:android:011e782559162dd7f16747",
+        "android_client_info": {
+          "package_name": "com.example.lost_n_found_simad"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVEyTKGnnY5YUvJTmVqvvRSumuWkrZbrY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

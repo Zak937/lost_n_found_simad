@@ -1,0 +1,27 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "lost-found-simad",
+          "appId": "1:558966368070:android:011e782559162dd7f16747",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "lost-found-simad",
+          "configurations": {
+            "android": "1:558966368070:android:011e782559162dd7f16747",
+            "ios": "1:558966368070:ios:884702b39fe084eef16747",
+            "web": "1:558966368070:web:1628ae65c59ab73df16747"
+          }
+        }
+      }
+    }
+  }
+}
