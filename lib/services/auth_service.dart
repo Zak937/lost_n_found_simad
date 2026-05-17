@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import '../models/user_model.dart';
+import 'firestore_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -34,6 +36,17 @@ class AuthService {
       // Send email verification
       if (userCredential.user != null && !userCredential.user!.emailVerified) {
         await userCredential.user!.sendEmailVerification();
+      }
+      
+      // Create default user profile in Firestore
+      if (userCredential.user != null) {
+        final userModel = UserModel(
+          id: userCredential.user!.uid,
+          email: userCredential.user!.email ?? email,
+          displayName: 'SIMAD Student',
+          phoneNumber: '',
+        );
+        await FirestoreService().createUserProfile(userModel);
       }
       
       return userCredential;

@@ -35,6 +35,26 @@ class _PostItemScreenState extends State<PostItemScreen> {
     'Other',
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadUserProfile();
+  }
+
+  Future<void> _loadUserProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final profile = await _firestoreService.getUserProfile(user.uid);
+      if (profile != null && profile.phoneNumber.isNotEmpty) {
+        if (mounted) {
+          setState(() {
+            _phoneCtrl.text = profile.phoneNumber;
+          });
+        }
+      }
+    }
+  }
+
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(

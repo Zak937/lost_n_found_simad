@@ -2,10 +2,28 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import '../models/item_model.dart';
+import '../models/user_model.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
+
+  // ── Users Collection ──────────────────────────────────────
+  Future<void> createUserProfile(UserModel user) async {
+    await _db.collection('users').doc(user.id).set(user.toMap());
+  }
+
+  Future<UserModel?> getUserProfile(String userId) async {
+    final doc = await _db.collection('users').doc(userId).get();
+    if (doc.exists && doc.data() != null) {
+      return UserModel.fromMap(doc.data()!, doc.id);
+    }
+    return null;
+  }
+
+  Future<void> updateUserProfile(UserModel user) async {
+    await _db.collection('users').doc(user.id).update(user.toMap());
+  }
 
   // ── Items Collection ──────────────────────────────────────
   Stream<List<ItemModel>> getItems({String? filterType}) {
