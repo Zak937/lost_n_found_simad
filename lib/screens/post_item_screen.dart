@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/item_model.dart';
 import '../services/firestore_service.dart';
+import '../services/imgbb_service.dart';
 
 class PostItemScreen extends StatefulWidget {
   const PostItemScreen({super.key});
@@ -72,7 +73,7 @@ class _PostItemScreenState extends State<PostItemScreen> {
       final user = FirebaseAuth.instance.currentUser!;
       String imageUrl = '';
       if (_imageFile != null) {
-        imageUrl = await _firestoreService.uploadImage(_imageFile!, user.uid);
+        imageUrl = await ImgbbService.uploadImage(_imageFile!);
       }
       final item = ItemModel(
         id: '',

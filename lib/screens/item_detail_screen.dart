@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/item_model.dart';
 import '../services/firestore_service.dart';
+import 'edit_item_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ItemDetailScreen extends StatelessWidget {
@@ -106,6 +107,26 @@ class ItemDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
+            actions: [
+              if (isOwner && !item.isResolved)
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      icon: const Icon(Icons.edit_rounded, color: Color(0xFF1A73E8), size: 18),
+                      onPressed: () async {
+                        final updated = await Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => EditItemScreen(item: item))
+                        );
+                        if (updated == true && context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      },
+                    ),
+                  ),
+                ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               background: item.imageUrl.isNotEmpty
                   ? Image.network(
@@ -235,60 +256,28 @@ class ItemDetailScreen extends StatelessWidget {
                   ],
 
                   if (isOwner && !item.isResolved) ...[
-                    if (item.itemStatus == 'Claimed_Pending') ...[
-                      SizedBox(
-                        width: double.infinity,
-                        height: 54,
-                        child: ElevatedButton.icon(
-                          onPressed: () => _updateStatusDialog(
-                            context,
-                            'Confirm Handover',
-                            'Are you sure you handed this item back? It will be marked as Recovered and removed from the feed.',
-                            'Recovered',
-                            true,
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF43A047),
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            elevation: 0,
-                          ),
-                          icon: const Icon(Icons.handshake_rounded),
-                          label: const Text(
-                            'Confirm Handover',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                    ],
                     SizedBox(
                       width: double.infinity,
                       height: 54,
                       child: ElevatedButton.icon(
                         onPressed: () => _updateStatusDialog(
                           context,
-                          'Archive Item',
-                          'Are you sure you want to archive this item? It will be removed from the main feed.',
-                          'Archived',
+                          'Mark as Recovered',
+                          'Are you sure you want to mark this item as recovered? It will be removed from the main feed.',
+                          'Recovered',
                           true,
                         ),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueGrey,
+                          backgroundColor: const Color(0xFF43A047),
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
                           elevation: 0,
                         ),
-                        icon: const Icon(Icons.archive_outlined),
+                        icon: const Icon(Icons.check_circle_outline_rounded),
                         label: const Text(
-                          'Archive Item',
+                          'Mark as Recovered',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

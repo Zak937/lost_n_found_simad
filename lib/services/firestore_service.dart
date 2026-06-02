@@ -1,12 +1,9 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import '../models/item_model.dart';
 import '../models/user_model.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   // ── Users Collection ──────────────────────────────────────
   Future<void> createUserProfile(UserModel user) async {
@@ -77,16 +74,18 @@ class FirestoreService {
     await _db.collection('items').doc(itemId).update(data);
   }
 
+  Future<void> updateItemDetails(String itemId, String title, String desc, String location, String category) async {
+    await _db.collection('items').doc(itemId).update({
+      'title': title,
+      'description': desc,
+      'location': location,
+      'category': category,
+    });
+  }
+
   Future<void> deleteItem(String itemId) async {
     await _db.collection('items').doc(itemId).delete();
   }
 
-  // ── Storage ───────────────────────────────────────────────
-  Future<String> uploadImage(File imageFile, String userId) async {
-    final ref = _storage.ref().child(
-      'items/$userId/${DateTime.now().millisecondsSinceEpoch}.jpg',
-    );
-    final task = await ref.putFile(imageFile);
-    return await task.ref.getDownloadURL();
-  }
+  // Image uploading is handled in separate ImgbbService
 }

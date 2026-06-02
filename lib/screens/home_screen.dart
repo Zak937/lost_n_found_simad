@@ -24,6 +24,18 @@ class _HomeScreenState extends State<HomeScreen> {
   int _navIndex = 0;
   final _searchCtrl = TextEditingController();
   String _searchQuery = '';
+  String _selectedCategory = 'All';
+
+  final List<String> _categories = [
+    'All',
+    'Electronics',
+    'Books & Notes',
+    'ID & Cards',
+    'Clothing',
+    'Keys',
+    'Bags',
+    'Other',
+  ];
 
   final List<Map<String, dynamic>> _filterOptions = [
     {'label': 'All', 'value': 'all'},
@@ -139,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(width: 10),
           const Text(
-            'Welcome To SIMAD Found', //
+            ' SIMAD Found', //
             style: TextStyle(
               color: Color(0xFF1A1A2E),
               fontWeight: FontWeight.bold,
@@ -187,10 +199,10 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-        // Filter chips
+        // Filter chips (Lost / Found)
         Container(
           color: Colors.white,
-          padding: const EdgeInsets.only(left: 16, bottom: 12),
+          padding: const EdgeInsets.only(left: 16, bottom: 8),
           child: Row(
             children: _filterOptions.map((opt) {
               final selected = _filter == opt['value'];
@@ -221,6 +233,45 @@ class _HomeScreenState extends State<HomeScreen> {
             }).toList(),
           ),
         ),
+        // Category chips
+        Container(
+          color: Colors.white,
+          height: 40,
+          padding: const EdgeInsets.only(bottom: 8),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: _categories.length,
+            itemBuilder: (context, index) {
+              final cat = _categories[index];
+              final selected = _selectedCategory == cat;
+              return Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: FilterChip(
+                  label: Text(cat, style: const TextStyle(fontSize: 13)),
+                  selected: selected,
+                  onSelected: (_) => setState(() => _selectedCategory = cat),
+                  selectedColor: const Color(0xFF1A73E8).withOpacity(0.15),
+                  labelStyle: TextStyle(
+                    color: selected ? const Color(0xFF1A73E8) : Colors.grey[700],
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                  ),
+                  backgroundColor: const Color(0xFFF0F2F5),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    side: BorderSide(
+                      color: selected
+                          ? const Color(0xFF1A73E8)
+                          : Colors.transparent,
+                    ),
+                  ),
+                  showCheckmark: false,
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 4),
         // Items list
         Expanded(
           child: StreamBuilder<List<ItemModel>>(
@@ -248,6 +299,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           i.location.toLowerCase().contains(_searchQuery),
                     )
                     .toList();
+              }
+              if (_selectedCategory != 'All') {
+                items = items.where((i) => i.category == _selectedCategory).toList();
               }
               if (items.isEmpty) {
                 return _emptyState(

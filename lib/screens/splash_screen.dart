@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                   const SizedBox(height: 28),
                   const Text(
-                    'Lost & Found',
+                    'SIMAD Found',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 32,
