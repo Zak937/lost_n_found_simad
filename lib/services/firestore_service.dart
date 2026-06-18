@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/item_model.dart';
 import '../models/user_model.dart';
+import '../models/recovery_model.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -88,4 +89,83 @@ class FirestoreService {
   }
 
   // Image uploading is handled in separate ImgbbService
+
+  // ── Recoveries Collection (Nested under posts) ─────────────────────────────────
+  Future<void> submitRecoveryClaim(RecoveryModel recovery) async {
+    final docRef = _db.collection('items').doc(recovery.targetItemId).collection('verifications').doc();
+    final newRecovery = RecoveryModel(
+      id: docRef.id,
+      targetItemId: recovery.targetItemId,
+      claimantId: recovery.claimantId,
+      claimantEmail: recovery.claimantEmail,
+      statement: recovery.statement,
+      finderId: recovery.finderId,
+      securityCode: recovery.securityCode,
+      timestamp: recovery.timestamp,
+    );
+    await docRef.set(newRecovery.toMap());
+    await updateItemStatus(recovery.targetItemId, 'Recovered');
+  }
+
+  Future<void> reportFakeClaim(String recoveryId, String itemId) async {
+    await _db.collection('items').doc(itemId).collection('verifications').doc(recoveryId).update({'isFakeClaim': true});
+    await updateItemStatus(itemId, 'Lost Item');
+  }
+
+  Stream<List<RecoveryModel>> getFakeClaims() {
+    return _db
+        .collectionGroup('verifications')
+        .where('isFakeClaim', isEqualTo: true)
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map(
+          (snap) => snap.docs
+              .map((doc) => RecoveryModel.fromMap(doc.data(), doc.id))
+              .toList(),
+        );
+  }
+
+  Future<RecoveryModel?> getRecoveryByItemAndClaimant(String itemId, String claimantId) async {
+    final query = await _db
+        .collection('items')
+        .doc(itemId)
+        .collection('verifications')
+        .where('claimantId', isEqualTo: claimantId)
+        .limit(1)
+        .get();
+        
+    if (query.docs.isNotEmpty) {
+      return RecoveryModel.fromMap(query.docs.first.data(), query.docs.first.id);
+    }
+    return null;
+  }
+  
+  Future<RecoveryModel?> getRecoveryByItemId(String itemId) async {
+    final query = await _db
+        .collection('items')
+        .doc(itemId)
+        .collection('verifications')
+        .get();
+        
+    if (query.docs.isNotEmpty) {
+      final docs = query.docs;
+      docs.sort((a, b) => (b.data()['timestamp'] as Timestamp).compareTo(a.data()['timestamp'] as Timestamp));
+      return RecoveryModel.fromMap(docs.first.data(), docs.first.id);
+    }
+    return null;
+  }
+
+  Stream<List<RecoveryModel>> getVerificationsStream(String itemId) {
+    return _db
+        .collection('items')
+        .doc(itemId)
+        .collection('verifications')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map(
+          (snap) => snap.docs
+              .map((doc) => RecoveryModel.fromMap(doc.data(), doc.id))
+              .toList(),
+        );
+  }
 }

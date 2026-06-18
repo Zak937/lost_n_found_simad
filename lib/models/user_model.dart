@@ -3,12 +3,14 @@ class UserModel {
   final String email;
   final String displayName;
   final String phoneNumber;
+  final String? fcmToken;
 
   UserModel({
     required this.id,
     required this.email,
     required this.displayName,
     required this.phoneNumber,
+    this.fcmToken,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map, String docId) {
@@ -17,6 +19,7 @@ class UserModel {
       email: map['email'] ?? '',
       displayName: map['displayName'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
+      fcmToken: map['fcmToken'],
     );
   }
 
@@ -25,6 +28,7 @@ class UserModel {
       'email': email,
       'displayName': displayName,
       'phoneNumber': phoneNumber,
+      'fcmToken': fcmToken,
     };
   }
 }

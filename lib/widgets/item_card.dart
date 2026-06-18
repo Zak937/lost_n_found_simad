@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../models/item_model.dart';
 
 class ItemCard extends StatelessWidget {
@@ -159,40 +158,6 @@ class ItemCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      // WhatsApp button
-                      if (item.posterPhone.isNotEmpty)
-                        GestureDetector(
-                          onTap: () => _openWhatsApp(item.posterPhone),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF25D366),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Row(
-                              children: [
-                                Icon(
-                                  Icons.chat_bubble_outline_rounded,
-                                  size: 13,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(width: 4),
-                                Text(
-                                  'WhatsApp',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                     ],
                   ),
                 ],
@@ -216,11 +181,5 @@ class ItemCard extends StatelessWidget {
       ),
       child: const Icon(Icons.image_outlined, size: 40, color: Colors.grey),
     );
-  }
-
-  void _openWhatsApp(String phone) async {
-    final cleaned = phone.replaceAll(RegExp(r'[^\d+]'), '');
-    final uri = Uri.parse('https://wa.me/$cleaned');
-    if (await canLaunchUrl(uri)) launchUrl(uri);
   }
 }

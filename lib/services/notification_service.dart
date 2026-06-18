@@ -1,5 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -33,10 +35,25 @@ class NotificationService {
       if (kDebugMode) {
         print('FCM Token: $token');
       }
-      // TODO: Save this token to the user's Firestore profile later
+      
+      if (token != null) {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+            'fcmToken': token,
+          });
+        }
+      }
+      
+      // Subscribe to all_users topic
+      await _messaging.subscribeToTopic('all_users');
+      if (kDebugMode) {
+        print('Subscribed to all_users topic');
+      }
+      
     } catch (e) {
       if (kDebugMode) {
-        print('Error retrieving FCM Token: $e');
+        print('Error retrieving/saving FCM Token: $e');
       }
     }
 

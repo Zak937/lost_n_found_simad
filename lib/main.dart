@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'screens/splash_screen.dart';
-
 import 'services/notification_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -23,7 +22,6 @@ void main() async {
 
   runApp(const LostAndFoundApp());
 }
-
 class LostAndFoundApp extends StatelessWidget {
   const LostAndFoundApp({super.key});
 

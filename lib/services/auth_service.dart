@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/user_model.dart';
 import 'firestore_service.dart';
+import 'notification_service.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -15,8 +16,10 @@ class AuthService {
             code: 'invalid-domain',
             message: 'Only SIMAD University emails (@simad.edu.so) are allowed.');
       }
-      return await _auth.signInWithEmailAndPassword(
+      final result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
+      await NotificationService().initNotifications();
+      return result;
     } on FirebaseAuthException catch (e) {
       throw _handleAuthError(e);
     }
@@ -48,6 +51,8 @@ class AuthService {
         );
         await FirestoreService().createUserProfile(userModel);
       }
+      
+      await NotificationService().initNotifications();
       
       return userCredential;
     } on FirebaseAuthException catch (e) {

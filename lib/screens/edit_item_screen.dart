@@ -13,7 +13,7 @@ class EditItemScreen extends StatefulWidget {
 class _EditItemScreenState extends State<EditItemScreen> {
   final _formKey = GlobalKey<FormState>();
   final _firestoreService = FirestoreService();
-  
+
   late TextEditingController _titleCtrl;
   late TextEditingController _descCtrl;
   late TextEditingController _locationCtrl;
@@ -91,7 +91,10 @@ class _EditItemScreenState extends State<EditItemScreen> {
         ),
         title: const Text(
           'Edit Post',
-          style: TextStyle(color: Color(0xFF1A1A2E), fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Color(0xFF1A1A2E),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: Form(
@@ -108,13 +111,23 @@ class _EditItemScreenState extends State<EditItemScreen> {
                 border: Border.all(color: const Color(0xFFE0E0E0)),
               ),
               child: DropdownButtonFormField<String>(
-                value: _categories.contains(_category) ? _category : _categories.first,
+                initialValue: _categories.contains(_category)
+                    ? _category
+                    : _categories.first,
                 decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.category_outlined, color: Color(0xFF1A73E8)),
+                  prefixIcon: Icon(
+                    Icons.category_outlined,
+                    color: Color(0xFF1A73E8),
+                  ),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 0,
+                    vertical: 4,
+                  ),
                 ),
-                items: _categories.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                items: _categories
+                    .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                    .toList(),
                 onChanged: (v) => setState(() => _category = v!),
               ),
             ),
@@ -159,12 +172,27 @@ class _EditItemScreenState extends State<EditItemScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF1A73E8),
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
                   elevation: 0,
                 ),
                 child: _loading
-                    ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                    : const Text('Save Changes', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                    ? const SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Text(
+                        'Save Changes',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
               ),
             ),
           ],
@@ -174,7 +202,14 @@ class _EditItemScreenState extends State<EditItemScreen> {
   }
 
   Widget _sectionLabel(String text) {
-    return Text(text, style: const TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF1A1A2E), fontSize: 14));
+    return Text(
+      text,
+      style: const TextStyle(
+        fontWeight: FontWeight.w600,
+        color: Color(0xFF1A1A2E),
+        fontSize: 14,
+      ),
+    );
   }
 
   Widget _buildField({
@@ -194,9 +229,18 @@ class _EditItemScreenState extends State<EditItemScreen> {
         prefixIcon: Icon(icon, color: const Color(0xFF1A73E8)),
         filled: true,
         fillColor: Colors.white,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFE0E0E0))),
-        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFFE0E0E0))),
-        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(14), borderSide: const BorderSide(color: Color(0xFF1A73E8), width: 2)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: const BorderSide(color: Color(0xFF1A73E8), width: 2),
+        ),
       ),
     );
   }
