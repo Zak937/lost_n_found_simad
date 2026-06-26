@@ -22,7 +22,8 @@ class NotificationService {
     if (kDebugMode) {
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
         print('User granted permission for notifications');
-      } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      } else if (settings.authorizationStatus ==
+          AuthorizationStatus.provisional) {
         print('User granted provisional permission for notifications');
       } else {
         print('User declined or has not accepted permission for notifications');
@@ -35,22 +36,22 @@ class NotificationService {
       if (kDebugMode) {
         print('FCM Token: $token');
       }
-      
+
       if (token != null) {
         final user = FirebaseAuth.instance.currentUser;
         if (user != null) {
-          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
-            'fcmToken': token,
-          });
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .update({'fcmToken': token});
         }
       }
-      
+
       // Subscribe to all_users topic
       await _messaging.subscribeToTopic('all_users');
       if (kDebugMode) {
         print('Subscribed to all_users topic');
       }
-      
     } catch (e) {
       if (kDebugMode) {
         print('Error retrieving/saving FCM Token: $e');
