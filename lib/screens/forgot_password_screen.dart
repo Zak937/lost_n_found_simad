@@ -17,23 +17,33 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   Future<void> _resetPassword() async {
     if (!_formKey.currentState!.validate()) return;
-    setState(() { _loading = true; _error = null; });
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
     try {
       await _auth.sendPasswordReset(_emailCtrl.text.trim());
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Reset link sent! Please check your email (and Spam folder).'),
+            content: Text(
+              'Reset link sent! Please check your email (and Spam folder).',
+            ),
             backgroundColor: Colors.green,
             duration: Duration(seconds: 4),
           ),
         );
-        Navigator.of(context).pop(); // Return to login screen
+        Navigator.of(context).pop(); // waxey dib inoogu celinaysaa login screen
       }
     } catch (e) {
-      setState(() { _error = e.toString(); });
+      setState(() {
+        _error = e.toString();
+      });
     } finally {
-      if (mounted) setState(() { _loading = false; });
+      if (mounted)
+        setState(() {
+          _loading = false;
+        });
     }
   }
 
@@ -86,8 +96,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
                       ],
                     ),
-                    child: const Icon(Icons.lock_reset_rounded,
-                        size: 50, color: Colors.white),
+                    child: const Icon(
+                      Icons.lock_reset_rounded,
+                      size: 50,
+                      color: Colors.white,
+                    ),
                   ),
                   const SizedBox(height: 24),
                   const Text(
@@ -128,13 +141,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ),
                             child: Row(
                               children: [
-                                const Icon(Icons.error_outline,
-                                    color: Colors.red, size: 18),
+                                const Icon(
+                                  Icons.error_outline,
+                                  color: Colors.red,
+                                  size: 18,
+                                ),
                                 const SizedBox(width: 8),
                                 Expanded(
-                                  child: Text(_error!,
-                                      style: const TextStyle(
-                                          color: Colors.red, fontSize: 13)),
+                                  child: Text(
+                                    _error!,
+                                    style: const TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 13,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -150,7 +170,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               backgroundColor: const Color(0xFF1A73E8),
                               foregroundColor: Colors.white,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(14)),
+                                borderRadius: BorderRadius.circular(14),
+                              ),
                               elevation: 0,
                             ),
                             child: _loading
@@ -158,11 +179,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                     width: 22,
                                     height: 22,
                                     child: CircularProgressIndicator(
-                                        color: Colors.white, strokeWidth: 2))
-                                : const Text('Send Reset Link',
+                                      color: Colors.white,
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : const Text(
+                                    'Send Reset Link',
                                     style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600)),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
                           ),
                         ),
                       ],
@@ -203,8 +230,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide:
-              const BorderSide(color: Color(0xFF1A73E8), width: 2),
+          borderSide: const BorderSide(color: Color(0xFF1A73E8), width: 2),
         ),
       ),
     );

@@ -253,7 +253,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   onSelected: (_) => setState(() => _selectedCategory = cat),
                   selectedColor: const Color(0xFF1A73E8).withOpacity(0.15),
                   labelStyle: TextStyle(
-                    color: selected ? const Color(0xFF1A73E8) : Colors.grey[700],
+                    color: selected
+                        ? const Color(0xFF1A73E8)
+                        : Colors.grey[700],
                     fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                   ),
                   backgroundColor: const Color(0xFFF0F2F5),
@@ -301,13 +303,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     .toList();
               }
               if (_selectedCategory != 'All') {
-                items = items.where((i) => i.category == _selectedCategory).toList();
+                items = items
+                    .where((i) => i.category == _selectedCategory)
+                    .toList();
               }
               if (items.isEmpty) {
                 return _emptyState(
                   icon: Icons.inbox_outlined,
                   title: 'No items found',
-                  subtitle: 'Be the first to report a lost or found item!',
+                  subtitle:
+                      'Be the first to report a lost Item  or Recover item!',
                 );
               }
               return ListView.builder(
